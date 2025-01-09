@@ -151,9 +151,28 @@ def simulate_login(user_account, user_password):
 
 # 访问成绩页面
 def get_score_page(session, cookies):
-    url = "http://zhjw.qfnu.edu.cn/jsxsd/kscj/cjcx_list?kksj=2024-2025-1"
+    url = "http://zhjw.qfnu.edu.cn/jsxsd/kscj/cjcx_list"
     respense = session.get(url, cookies=cookies)
     return respense.text
+
+# 解析成绩页面
+def analyze_score_page(pagehtml):
+    soup = BeautifulSoup(pagehtml, "lxml")
+    results = []
+
+    # 找到成绩表格
+    table = soup.find("table", {"id": "dataList"})
+    if table:
+        # 遍历表格的每一行
+        rows = table.find_all("tr")[1:]  # 跳过表头
+        for row in rows:
+            columns = row.find_all("td")
+            if len(columns) > 5:
+                subject_name = columns[3].get_text(strip=True)
+                score = columns[5].get_text(strip=True)
+                results.append((subject_name, score))
+
+    return results
 
 
 def print_welcome():
@@ -168,6 +187,11 @@ def main():
     """
     主函数，协调整个程序的执行流程
     """
+
+    # 定义全局变量，存储上一次的数据
+    global last_score_list
+    last_score_list = []  # 初始化为空列表
+
     print_welcome()
 
     # 获取环境变量
@@ -187,8 +211,16 @@ def main():
 
     # 访问成绩页面
     score_page = get_score_page(session, cookies)
-    print(score_page)
 
+    # 解析成绩
+    score_list = analyze_score_page(score_page)
+
+    # 检查是否有新成绩
+    if score_list != last_score_list:
+        print("发现新成绩！")
+        last_score_list = score_list  # 更新全局变量
+    else:
+        print("没有新成绩。")
 
 if __name__ == "__main__":
     main()
