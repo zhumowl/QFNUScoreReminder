@@ -2,11 +2,8 @@ import requests
 from PIL import Image
 from io import BytesIO
 from bs4 import BeautifulSoup
-from ics import Calendar, Event
-from datetime import datetime
 from captcha_ocr import get_ocr_res
 import os
-from pytz import timezone
 from dotenv import load_dotenv
 import time
 import json
@@ -240,26 +237,26 @@ def main():
         return
 
     while True:
-        test()
-        # # 访问成绩页面
-        # score_page = get_score_page(session, cookies)
 
-        # # 解析成绩
-        # score_list = analyze_score_page(score_page)
+        # 访问成绩页面
+        score_page = get_score_page(session, cookies)
 
-        # # 初始化成绩列表
-        # if not last_score_list:
-        #     print("初始化成绩列表")
-        #     last_score_list = score_list
+        # 解析成绩
+        score_list = analyze_score_page(score_page)
 
-        # # 检查是否有新成绩
-        # if score_list != last_score_list:
-        #     new_scores = get_new_scores(score_list, score_list)
-        #     print(f"发现新成绩！{new_scores}")
-        #     last_score_list = score_list  # 更新全局变量
-        # else:
-        #     print(f"没有新成绩，当前成绩{score_list}")
-        #     print()
+        # 初始化成绩列表
+        if not last_score_list:
+            print("初始化成绩列表")
+            last_score_list = score_list
+
+        # 检查是否有新成绩
+        if score_list != last_score_list:
+            new_scores = get_new_scores(score_list, score_list)
+            print(f"发现新成绩！{new_scores}")
+            last_score_list = score_list  # 更新全局变量
+        else:
+            print(f"没有新成绩，当前成绩{score_list}")
+            print()
 
         time.sleep(2)
 
