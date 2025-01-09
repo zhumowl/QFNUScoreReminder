@@ -155,6 +155,7 @@ def get_score_page(session, cookies):
     respense = session.get(url, cookies=cookies)
     return respense.text
 
+
 # 解析成绩页面
 def analyze_score_page(pagehtml):
     soup = BeautifulSoup(pagehtml, "lxml")
@@ -173,6 +174,20 @@ def analyze_score_page(pagehtml):
                 results.append((subject_name, score))
 
     return results
+
+
+# 分离新增成绩的科目和成绩
+def get_new_scores(current_scores, last_scores):
+    """
+    获取新增的成绩
+    参数:
+        current_scores: 当前获取的成绩列表
+        last_scores: 上一次获取的成绩列表
+    返回: 新增成绩的列表
+    """
+    # 使用集合差集来找出新增的成绩
+    new_scores = [score for score in current_scores if score not in last_scores]
+    return new_scores
 
 
 def print_welcome():
@@ -218,9 +233,12 @@ def main():
     # 检查是否有新成绩
     if score_list != last_score_list:
         print("发现新成绩！")
+        new_scores = get_new_scores(score_list, score_list)
+        print(new_scores)
         last_score_list = score_list  # 更新全局变量
     else:
         print("没有新成绩。")
+
 
 if __name__ == "__main__":
     main()
