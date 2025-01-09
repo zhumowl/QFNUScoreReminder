@@ -8,6 +8,8 @@ from captcha_ocr import get_ocr_res
 import os
 from pytz import timezone
 from dotenv import load_dotenv
+import time
+import json
 
 load_dotenv()
 
@@ -151,7 +153,7 @@ def simulate_login(user_account, user_password):
 
 # 访问成绩页面
 def get_score_page(session, cookies):
-    url = "http://zhjw.qfnu.edu.cn/jsxsd/kscj/cjcx_list"
+    url = "http://zhjw.qfnu.edu.cn/jsxsd/kscj/cjcx_list?kksj=2024-2025-1"
     respense = session.get(url, cookies=cookies)
     return respense.text
 
@@ -190,6 +192,19 @@ def get_new_scores(current_scores, last_scores):
     return new_scores
 
 
+def test():
+    global last_score_list
+    with open("test.json", "r", encoding="utf-8") as f:
+        testinfo = json.load(f)
+        # 将字符串解析为 Python 列表
+        current_scores = eval(testinfo["current_scores"])
+        last_scores = eval(testinfo["last_scores"])
+        print(current_scores)
+        print(last_scores)
+        new_scores = get_new_scores(current_scores, last_scores)
+        print(new_scores)
+
+
 def print_welcome():
     print("\n" * 30)
     print(f"\n{'*' * 10} 曲阜师范大学教务系统模拟登录脚本 {'*' * 10}\n")
@@ -224,20 +239,29 @@ def main():
         print("无法建立会话，请检查网络连接或教务系统的可用性。")
         return
 
-    # 访问成绩页面
-    score_page = get_score_page(session, cookies)
+    while True:
+        test()
+        # # 访问成绩页面
+        # score_page = get_score_page(session, cookies)
 
-    # 解析成绩
-    score_list = analyze_score_page(score_page)
+        # # 解析成绩
+        # score_list = analyze_score_page(score_page)
 
-    # 检查是否有新成绩
-    if score_list != last_score_list:
-        print("发现新成绩！")
-        new_scores = get_new_scores(score_list, score_list)
-        print(new_scores)
-        last_score_list = score_list  # 更新全局变量
-    else:
-        print("没有新成绩。")
+        # # 初始化成绩列表
+        # if not last_score_list:
+        #     print("初始化成绩列表")
+        #     last_score_list = score_list
+
+        # # 检查是否有新成绩
+        # if score_list != last_score_list:
+        #     new_scores = get_new_scores(score_list, score_list)
+        #     print(f"发现新成绩！{new_scores}")
+        #     last_score_list = score_list  # 更新全局变量
+        # else:
+        #     print(f"没有新成绩，当前成绩{score_list}")
+        #     print()
+
+        time.sleep(2)
 
 
 if __name__ == "__main__":
