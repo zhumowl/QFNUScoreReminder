@@ -149,6 +149,13 @@ def simulate_login(user_account, user_password):
     raise Exception("验证码识别错误，请重试")
 
 
+# 访问成绩页面
+def get_score_page(session, cookies):
+    url = "http://zhjw.qfnu.edu.cn/jsxsd/kscj/cjcx_list?kksj=2024-2025-1"
+    respense = session.get(url, cookies=cookies)
+    return respense.text
+
+
 def print_welcome():
     print("\n" * 30)
     print(f"\n{'*' * 10} 曲阜师范大学教务系统模拟登录脚本 {'*' * 10}\n")
@@ -178,8 +185,9 @@ def main():
         print("无法建立会话，请检查网络连接或教务系统的可用性。")
         return
 
-    # 接下来的操作请参考 https://github.com/W1ndys/QFNUExam2ics/blob/ec6e5b4969b7605ca3654e2545b666376b62b7ef/main.py#L275
-    # 实际上就是带着 session 和 cookies 去请求教务系统，然后获取数据
+    # 访问成绩页面
+    score_page = get_score_page(session, cookies)
+    print(score_page)
 
 
 if __name__ == "__main__":
