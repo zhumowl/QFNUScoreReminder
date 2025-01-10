@@ -7,6 +7,7 @@ import hashlib
 import urllib
 import base64
 import urllib.parse
+import logging
 
 
 # 推送到钉钉
@@ -34,11 +35,11 @@ def dingtalk(DD_BOT_TOKEN, DD_BOT_SECRET, text, desp):
     try:
         data = response.json()
         if response.status_code == 200 and data.get("errcode") == 0:
-            print("钉钉发送通知消息成功🎉")
+            logging.info("钉钉发送通知消息成功🎉")
         else:
-            print(f"钉钉发送通知消息失败😞\n{data.get('errmsg')}")
+            logging.error(f"钉钉发送通知消息失败😞\n{data.get('errmsg')}")
     except Exception as e:
-        print(f"钉钉发送通知消息失败😞\n{e}")
+        logging.error(f"钉钉发送通知消息失败😞\n{e}")
 
     return response.json()
 

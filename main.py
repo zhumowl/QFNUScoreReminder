@@ -8,11 +8,17 @@ from dotenv import load_dotenv
 import time
 import json
 from dingtalk import dingtalk
+import logging
 
 load_dotenv()
 
 DD_BOT_TOKEN = os.getenv("DD_BOT_TOKEN")
 DD_BOT_SECRET = os.getenv("DD_BOT_SECRET")
+
+# 设置日志配置
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
 # 设置基本的URL和数据
 RandCodeUrl = "http://zhjw.qfnu.edu.cn/verifycode.servlet"  # 验证码请求URL
@@ -42,13 +48,13 @@ def handle_captcha(session, cookies):
 
     # 添加调试信息
     if response.status_code != 200:
-        print(f"请求验证码失败，状态码: {response.status_code}")
+        logging.error(f"请求验证码失败，状态码: {response.status_code}")
         return None
 
     try:
         image = Image.open(BytesIO(response.content))
     except Exception as e:
-        print(f"无法识别图像文件: {e}")
+        logging.error(f"无法识别图像文件: {e}")
         return None
 
     return get_ocr_res(image)
@@ -114,8 +120,8 @@ def get_user_credentials():
     """
     user_account = os.getenv("USER_ACCOUNT")
     user_password = os.getenv("USER_PASSWORD")
-    print(f"用户名: {user_account}\n")
-    print(f"密码: {user_password}\n")
+    logging.info(f"用户名: {user_account}")
+    logging.info(f"密码: {user_password}")
     return user_account, user_password
 
 
@@ -139,11 +145,11 @@ def simulate_login(user_account, user_password):
         # 检查响应状态码和内容
         if response.status_code == 200:
             if "验证码错误!!" in response.text:
-                print(f"验证码识别错误，重试第 {attempt + 1} 次\n")
+                logging.warning(f"验证码识别错误，重试第 {attempt + 1} 次")
                 continue  # 继续尝试
             if "密码错误" in response.text:
                 raise Exception("用户名或密码错误")
-            print("登录成功，cookies已返回\n")
+            logging.info("登录成功，cookies已返回")
             return session, cookies
         else:
             raise Exception("登录失败")
@@ -199,18 +205,18 @@ def test():
         # 将字符串解析为 Python 列表
         current_scores = eval(testinfo["current_scores"])
         last_scores = eval(testinfo["last_scores"])
-        print(current_scores)
-        print(last_scores)
+        logging.info(current_scores)
+        logging.info(last_scores)
         new_scores = get_new_scores(current_scores, last_scores)
-        print(new_scores)
+        logging.info(new_scores)
 
 
 def print_welcome():
-    print("\n" * 30)
-    print(f"\n{'*' * 10} 曲阜师范大学教务系统模拟登录脚本 {'*' * 10}\n")
-    print("By W1ndys")
-    print("https://github.com/W1ndys")
-    print("\n\n")
+    logging.info("\n" * 30)
+    logging.info(f"\n{'*' * 10} 曲阜师范大学教务系统模拟登录脚本 {'*' * 10}\n")
+    logging.info("By W1ndys")
+    logging.info("https://github.com/W1ndys")
+    logging.info("\n\n")
 
 
 def main():
@@ -229,7 +235,7 @@ def main():
     # 获取环境变量
     user_account, user_password = get_user_credentials()
     if not user_account or not user_password:
-        print("请在.env文件中设置USER_ACCOUNT和USER_PASSWORD环境变量\n")
+        logging.error("请在.env文件中设置USER_ACCOUNT和USER_PASSWORD环境变量")
         with open(".env", "w", encoding="utf-8") as f:
             f.write("USER_ACCOUNT=\nUSER_PASSWORD=")
         return
@@ -238,7 +244,7 @@ def main():
     session, cookies = simulate_login(user_account, user_password)
 
     if not session or not cookies:
-        print("无法建立会话，请检查网络连接或教务系统的可用性。")
+        logging.error("无法建立会话，请检查网络连接或教务系统的可用性。")
         return
 
     while True:
@@ -251,22 +257,22 @@ def main():
 
             # 初始化成绩列表
             if not last_score_list:
-                print("初始化成绩列表")
+                logging.info("初始化成绩列表")
                 last_score_list = score_list
 
             # 检查是否有新成绩
             if score_list != last_score_list:
                 new_scores = get_new_scores(score_list, last_score_list)
                 if new_scores:
-                    print(f"发现新成绩！{new_scores}")
+                    logging.info(f"发现新成绩！{new_scores}")
                     message = f"科目: {new_scores[0][0]}\n成绩: {new_scores[0][1]}"
                     dingtalk(DD_BOT_TOKEN, DD_BOT_SECRET, "发现新成绩！", message)
                 last_score_list = score_list  # 更新全局变量
             else:
-                print(f"没有新成绩，当前成绩{score_list}")
+                logging.info(f"没有新成绩，当前成绩{score_list}")
 
         except IndexError:
-            print("新成绩列表为空，可能被顶下线，十分钟后重新登录。")
+            logging.warning("新成绩列表为空，可能被顶下线，十分钟后重新登录。")
             time.sleep(600)  # 等待十分钟
             session, cookies = simulate_login(user_account, user_password)
 

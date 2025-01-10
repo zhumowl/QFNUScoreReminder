@@ -7,6 +7,9 @@ WORKDIR /app
 # 复制项目文件到容器中
 COPY . /app
 
+# 设置环境变量以禁用输出缓冲
+ENV PYTHONUNBUFFERED=1
+
 # 安装项目依赖
 RUN pip install --no-cache-dir -r requirements.txt
 
