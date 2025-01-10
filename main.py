@@ -159,7 +159,7 @@ def simulate_login(user_account, user_password):
 
 # 访问成绩页面
 def get_score_page(session, cookies):
-    url = "http://zhjw.qfnu.edu.cn/jsxsd/kscj/cjcx_list?kksj=2024-2025-1"
+    url = "http://zhjw.qfnu.edu.cn/jsxsd/kscj/cjcx_list"
     respense = session.get(url, cookies=cookies)
     return respense.text
 
@@ -205,7 +205,7 @@ def print_welcome():
     logging.info(f"\n{'*' * 10} 曲阜师范大学成绩监控脚本 {'*' * 10}\n")
     logging.info("By W1ndys")
     logging.info("https://github.com/W1ndys/QFNUScoreReminder")
-    logging.info("\n\n")
+    logging.info("https://www.w1ndys.top")
 
 
 def save_scores_to_file(scores, filename="scores.json"):
