@@ -136,7 +136,7 @@ def simulate_login(user_account, user_password):
 
     for attempt in range(3):  # 尝试三次
         random_code = handle_captcha(session, cookies)
-        print(f"验证码: {random_code}\n")
+        logging.info(f"验证码: {random_code}\n")
         encoded = generate_encoded_string(data_str, user_account, user_password)
         response = login(
             session, cookies, user_account, user_password, random_code, encoded
@@ -219,15 +219,35 @@ def print_welcome():
     logging.info("\n\n")
 
 
+def save_scores_to_file(scores, filename="scores.json"):
+    """
+    将成绩保存到本地文件
+    参数:
+        scores: 成绩列表
+        filename: 保存的文件名
+    """
+    with open(filename, "w", encoding="utf-8") as f:
+        json.dump(scores, f, ensure_ascii=False, indent=4)
+    logging.info(f"成绩已保存到 {filename}")
+
+
+def load_scores_from_file(filename="scores.json"):
+    """
+    从本地文件加载成绩
+    参数:
+        filename: 文件名
+    返回: 成绩列表
+    """
+    if os.path.exists(filename):
+        with open(filename, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return []
+
+
 def main():
     """
     主函数，协调整个程序的执行流程
     """
-
-    # 定义全局变量，存储上一次的数据
-    global last_score_list
-    last_score_list = []  # 初始化为空列表
-
     print_welcome()
 
     # 发送钉钉消息
@@ -247,36 +267,29 @@ def main():
         logging.error("无法建立会话，请检查网络连接或教务系统的可用性。")
         return
 
-    while True:
-        try:
-            # 访问成绩页面
-            score_page = get_score_page(session, cookies)
+    try:
+        # 从文件加载上一次的成绩
+        last_score_list = load_scores_from_file()
 
-            # 解析成绩
-            score_list = analyze_score_page(score_page)
+        # 访问成绩页面
+        score_page = get_score_page(session, cookies)
 
-            # 初始化成绩列表
-            if not last_score_list:
-                logging.info("初始化成绩列表")
-                last_score_list = score_list
+        # 解析成绩
+        score_list = analyze_score_page(score_page)
 
-            # 检查是否有新成绩
-            if score_list != last_score_list:
-                new_scores = get_new_scores(score_list, last_score_list)
-                if new_scores:
-                    logging.info(f"发现新成绩！{new_scores}")
-                    message = f"科目: {new_scores[0][0]}\n成绩: {new_scores[0][1]}"
-                    dingtalk(DD_BOT_TOKEN, DD_BOT_SECRET, "发现新成绩！", message)
-                last_score_list = score_list  # 更新全局变量
-            else:
-                logging.info(f"没有新成绩，当前成绩{score_list}")
+        # 检查是否有新成绩
+        if score_list != last_score_list:
+            new_scores = get_new_scores(score_list, last_score_list)
+            if new_scores:
+                logging.info(f"发现新成绩！{new_scores}")
+                message = f"科目: {new_scores[0][0]}\n成绩: {new_scores[0][1]}"
+                dingtalk(DD_BOT_TOKEN, DD_BOT_SECRET, "发现新成绩！", message)
+            save_scores_to_file(score_list)  # 保存成绩到文件
+        else:
+            logging.info(f"没有新成绩，当前成绩{score_list}")
 
-        except IndexError:
-            logging.warning("新成绩列表为空，可能被顶下线，十分钟后重新登录。")
-            time.sleep(600)  # 等待十分钟
-            session, cookies = simulate_login(user_account, user_password)
-
-        time.sleep(2)
+    except IndexError:
+        logging.error("IndexError: 索引超出范围")
 
 
 if __name__ == "__main__":
