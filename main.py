@@ -201,10 +201,10 @@ def get_new_scores(current_scores, last_scores):
 
 
 def print_welcome():
-    logging.info("\n" * 30)
-    logging.info(f"\n{'*' * 10} 曲阜师范大学教务系统模拟登录脚本 {'*' * 10}\n")
+    logging.info("\n" * 10)
+    logging.info(f"\n{'*' * 10} 曲阜师范大学成绩监控脚本 {'*' * 10}\n")
     logging.info("By W1ndys")
-    logging.info("https://github.com/W1ndys")
+    logging.info("https://github.com/W1ndys/QFNUScoreReminder")
     logging.info("\n\n")
 
 
@@ -242,9 +242,6 @@ def main():
     主函数，协调整个程序的执行流程
     """
     print_welcome()
-
-    # 发送钉钉消息
-    dingtalk(DD_BOT_TOKEN, DD_BOT_SECRET, "成绩监控开始运行通知", "开始运行通知")
 
     # 获取环境变量
     user_account, user_password = get_user_credentials()
