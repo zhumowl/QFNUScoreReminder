@@ -10,9 +10,6 @@ COPY . /app
 # 安装项目依赖
 RUN pip install --no-cache-dir -r requirements.txt
 
-# 暴露应用运行的端口
-EXPOSE 5000
-
 # 允许python文件运行
-CMD ["python", "webserver.py"]
+CMD ["python", "main.py"]
 

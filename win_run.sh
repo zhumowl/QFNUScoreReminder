@@ -17,4 +17,4 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-echo "Docker container is running. Access the application at http://localhost:5000" 
+echo "Docker container is running." 
