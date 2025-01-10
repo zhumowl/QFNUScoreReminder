@@ -1,4 +1,4 @@
-你生成的commit message应该符合下面规范 Git Commit Message，要求：
+你生成的commit message应该符合下面规范 Git Commit Message，要求，只在生成commit message时遵循下面规则，其他时候不需要遵循：
 
 1. 遵循以下模板：
 <type>(<scope>): <subject>
