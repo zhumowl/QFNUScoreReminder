@@ -193,16 +193,10 @@ def get_new_scores(current_scores, last_scores):
         last_scores: 上一次获取的成绩列表
     返回: 新增成绩的列表
     """
-    # 将 current_scores 转换为列表的列表
-    current_scores_list = [list(score) for score in current_scores]
 
-    # 将 last_scores 转换为集合以便于比较
-    last_scores_set = {tuple(score) for score in last_scores}
+    # 在current_scores中找出last_scores中不存在的元素
+    new_scores = [score for score in current_scores if score not in last_scores]
 
-    # 使用集合差集来找出新增的成绩
-    new_scores = [
-        score for score in current_scores_list if tuple(score) not in last_scores_set
-    ]
     return new_scores
 
 
@@ -289,10 +283,12 @@ def main():
         score_list_converted = [list(score) for score in score_list]
 
         if score_list_converted != last_score_list:
-            new_scores = get_new_scores(score_list, last_score_list)
+            new_scores = get_new_scores(score_list_converted, last_score_list)
             if new_scores:
                 logging.info(f"发现新成绩！{new_scores}")
-                message = f"科目: {new_scores[0][0]}\n成绩: {new_scores[0][1]}"
+                message = "\n".join(
+                    [f"科目: {score[0]}\n成绩: {score[1]}" for score in new_scores]
+                )
                 dingtalk(
                     DD_BOT_TOKEN,
                     DD_BOT_SECRET,
