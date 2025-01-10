@@ -2,6 +2,5 @@ pytz
 requests
 Pillow
 beautifulsoup4
-ics
 ddddocr
 python-dotenv
