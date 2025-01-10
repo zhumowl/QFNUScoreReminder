@@ -5,7 +5,3 @@ beautifulsoup4
 ics
 ddddocr
 python-dotenv
-hmac
-hashlib
-urllib
-base64
