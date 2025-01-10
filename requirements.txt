@@ -4,3 +4,4 @@ Pillow
 beautifulsoup4
 ddddocr
 python-dotenv
+lxml

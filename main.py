@@ -224,6 +224,8 @@ def main():
 
     print_welcome()
 
+    # 发送钉钉消息
+    dingtalk(DD_BOT_TOKEN, DD_BOT_SECRET, "成绩监控开始运行通知", "开始运行通知")
     # 获取环境变量
     user_account, user_password = get_user_credentials()
     if not user_account or not user_password:
