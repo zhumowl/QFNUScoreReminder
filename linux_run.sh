@@ -7,7 +7,7 @@ IMAGE_NAME="qfnu-score-reminder"
 # 删除已有的容器
 docker rm -f $PROJECT_NAME
 
-# 运行Docker容器
+# 运行Docker容器，挂载当前目录到容器中，以便于不重建镜像修改代码
 echo "Running Docker container..."
 docker run -d -p 5000:5000 -v "$(pwd)":/app --name $PROJECT_NAME $IMAGE_NAME
 
