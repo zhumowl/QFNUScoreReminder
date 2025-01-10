@@ -7,9 +7,12 @@ import os
 from dotenv import load_dotenv
 import time
 import json
+from dingtalk import dingtalk
 
 load_dotenv()
 
+DD_BOT_TOKEN = os.getenv("DD_BOT_TOKEN")
+DD_BOT_SECRET = os.getenv("DD_BOT_SECRET")
 
 # 设置基本的URL和数据
 RandCodeUrl = "http://zhjw.qfnu.edu.cn/verifycode.servlet"  # 验证码请求URL
@@ -253,10 +256,10 @@ def main():
         if score_list != last_score_list:
             new_scores = get_new_scores(score_list, score_list)
             print(f"发现新成绩！{new_scores}")
+            dingtalk(DD_BOT_TOKEN, DD_BOT_SECRET, "发现新成绩！", f"{new_scores}")
             last_score_list = score_list  # 更新全局变量
         else:
             print(f"没有新成绩，当前成绩{score_list}")
-            print()
 
         time.sleep(2)
 
