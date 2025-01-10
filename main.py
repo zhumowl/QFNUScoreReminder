@@ -136,7 +136,7 @@ def simulate_login(user_account, user_password):
 
     for attempt in range(3):  # 尝试三次
         random_code = handle_captcha(session, cookies)
-        logging.info(f"验证码: {random_code}\n")
+        logging.info(f"验证码: {random_code}")
         encoded = generate_encoded_string(data_str, user_account, user_password)
         response = login(
             session, cookies, user_account, user_password, random_code, encoded
@@ -193,22 +193,14 @@ def get_new_scores(current_scores, last_scores):
         last_scores: 上一次获取的成绩列表
     返回: 新增成绩的列表
     """
+    # 将 last_scores 转换为集合以便于比较
+    last_scores_set = {tuple(score) for score in last_scores}
+
     # 使用集合差集来找出新增的成绩
-    new_scores = [score for score in current_scores if score not in last_scores]
+    new_scores = [
+        score for score in current_scores if tuple(score) not in last_scores_set
+    ]
     return new_scores
-
-
-def test():
-    global last_score_list
-    with open("test.json", "r", encoding="utf-8") as f:
-        testinfo = json.load(f)
-        # 将字符串解析为 Python 列表
-        current_scores = eval(testinfo["current_scores"])
-        last_scores = eval(testinfo["last_scores"])
-        logging.info(current_scores)
-        logging.info(last_scores)
-        new_scores = get_new_scores(current_scores, last_scores)
-        logging.info(new_scores)
 
 
 def print_welcome():
@@ -241,7 +233,11 @@ def load_scores_from_file(filename="scores.json"):
     if os.path.exists(filename):
         with open(filename, "r", encoding="utf-8") as f:
             return json.load(f)
-    return []
+    else:
+        logging.error(f"文件 {filename} 不存在，新建空文件")
+        with open(filename, "w", encoding="utf-8") as f:
+            f.write("[]")
+        return []
 
 
 def main():
@@ -285,6 +281,11 @@ def main():
 
         # 解析成绩
         score_list = analyze_score_page(score_page)
+
+        if not last_score_list:
+            logging.error("本地成绩文件为空，初始化成绩文件")
+            save_scores_to_file(score_list)
+            return
 
         # 检查是否有新成绩
         if score_list != last_score_list:
