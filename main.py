@@ -193,12 +193,15 @@ def get_new_scores(current_scores, last_scores):
         last_scores: 上一次获取的成绩列表
     返回: 新增成绩的列表
     """
+    # 将 current_scores 转换为列表的列表
+    current_scores_list = [list(score) for score in current_scores]
+
     # 将 last_scores 转换为集合以便于比较
     last_scores_set = {tuple(score) for score in last_scores}
 
     # 使用集合差集来找出新增的成绩
     new_scores = [
-        score for score in current_scores if tuple(score) not in last_scores_set
+        score for score in current_scores_list if tuple(score) not in last_scores_set
     ]
     return new_scores
 
@@ -282,13 +285,10 @@ def main():
         # 解析成绩
         score_list = analyze_score_page(score_page)
 
-        if not last_score_list:
-            logging.error("本地成绩文件为空，初始化成绩文件")
-            save_scores_to_file(score_list)
-            return
+        # 将 score_list 转换为与 last_score_list 相同的格式
+        score_list_converted = [list(score) for score in score_list]
 
-        # 检查是否有新成绩
-        if score_list != last_score_list:
+        if score_list_converted != last_score_list:
             new_scores = get_new_scores(score_list, last_score_list)
             if new_scores:
                 logging.info(f"发现新成绩！{new_scores}")
@@ -299,9 +299,9 @@ def main():
                     "成绩监控通知",
                     f"发现新成绩！\n{message}",
                 )
-            save_scores_to_file(score_list)  # 保存成绩到文件
+            save_scores_to_file(score_list_converted)  # 保存成绩到文件
         else:
-            logging.info(f"没有新成绩，当前成绩{score_list}")
+            logging.info(f"没有新成绩，当前成绩{score_list_converted}")
 
     except Exception as e:
         logging.error(f"发生错误: {e}")
