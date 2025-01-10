@@ -252,12 +252,15 @@ def main():
 
     # 发送钉钉消息
     dingtalk(DD_BOT_TOKEN, DD_BOT_SECRET, "成绩监控开始运行通知", "开始运行通知")
+
     # 获取环境变量
     user_account, user_password = get_user_credentials()
     if not user_account or not user_password:
-        logging.error("请在.env文件中设置USER_ACCOUNT和USER_PASSWORD环境变量")
+        logging.error(
+            "请在.env文件中设置USER_ACCOUNT、USER_PASSWORD、DD_BOT_TOKEN、DD_BOT_SECRET环境变量"
+        )
         with open(".env", "w", encoding="utf-8") as f:
-            f.write("USER_ACCOUNT=\nUSER_PASSWORD=")
+            f.write("USER_ACCOUNT=\nUSER_PASSWORD=\nDD_BOT_TOKEN=\nDD_BOT_SECRET=")
         return
 
     # 模拟登录并获取会话
@@ -265,6 +268,12 @@ def main():
 
     if not session or not cookies:
         logging.error("无法建立会话，请检查网络连接或教务系统的可用性。")
+        dingtalk(
+            DD_BOT_TOKEN,
+            DD_BOT_SECRET,
+            "成绩监控通知",
+            "无法建立会话，请检查网络连接或教务系统的可用性。",
+        )
         return
 
     try:
@@ -283,13 +292,24 @@ def main():
             if new_scores:
                 logging.info(f"发现新成绩！{new_scores}")
                 message = f"科目: {new_scores[0][0]}\n成绩: {new_scores[0][1]}"
-                dingtalk(DD_BOT_TOKEN, DD_BOT_SECRET, "发现新成绩！", message)
+                dingtalk(
+                    DD_BOT_TOKEN,
+                    DD_BOT_SECRET,
+                    "成绩监控通知",
+                    f"发现新成绩！\n{message}",
+                )
             save_scores_to_file(score_list)  # 保存成绩到文件
         else:
             logging.info(f"没有新成绩，当前成绩{score_list}")
 
-    except IndexError:
-        logging.error("IndexError: 索引超出范围")
+    except Exception as e:
+        logging.error(f"发生错误: {e}")
+        dingtalk(
+            DD_BOT_TOKEN,
+            DD_BOT_SECRET,
+            "成绩监控通知",
+            f"发生错误: {e}",
+        )
 
 
 if __name__ == "__main__":
