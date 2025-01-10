@@ -1,6 +1,6 @@
 所有生成内容都使用中文
 
-你生成的commit message应该符合下面规范 Git Commit Message，要求，只在生成commit message时遵循下面规则：
+你生成的commit message应该符合下面规范 Git Commit Message，要求：
 
 1. 遵循以下模板：
 <type>(<scope>): <subject>

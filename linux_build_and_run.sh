@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # 设置项目名称和镜像名称
-PROJECT_NAME="qfnu-login-webserver"
-IMAGE_NAME="qfnu-login-webserver"
+PROJECT_NAME="qfnu-score-reminder"
+IMAGE_NAME="qfnu-score-reminder"
 
 # 构建Docker镜像
 echo "Building Docker image..."
