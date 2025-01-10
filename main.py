@@ -242,27 +242,33 @@ def main():
         return
 
     while True:
+        try:
+            # 访问成绩页面
+            score_page = get_score_page(session, cookies)
 
-        # 访问成绩页面
-        score_page = get_score_page(session, cookies)
+            # 解析成绩
+            score_list = analyze_score_page(score_page)
 
-        # 解析成绩
-        score_list = analyze_score_page(score_page)
+            # 初始化成绩列表
+            if not last_score_list:
+                print("初始化成绩列表")
+                last_score_list = score_list
 
-        # 初始化成绩列表
-        if not last_score_list:
-            print("初始化成绩列表")
-            last_score_list = score_list
+            # 检查是否有新成绩
+            if score_list != last_score_list:
+                new_scores = get_new_scores(score_list, last_score_list)
+                if new_scores:
+                    print(f"发现新成绩！{new_scores}")
+                    message = f"科目: {new_scores[0][0]}\n成绩: {new_scores[0][1]}"
+                    dingtalk(DD_BOT_TOKEN, DD_BOT_SECRET, "发现新成绩！", message)
+                last_score_list = score_list  # 更新全局变量
+            else:
+                print(f"没有新成绩，当前成绩{score_list}")
 
-        # 检查是否有新成绩
-        if score_list != last_score_list:
-            new_scores = get_new_scores(score_list, score_list)
-            print(f"发现新成绩！{new_scores}")
-            message = f"科目: {new_scores[0][0]}\n成绩: {new_scores[0][1]}"
-            dingtalk(DD_BOT_TOKEN, DD_BOT_SECRET, "发现新成绩！", message)
-            last_score_list = score_list  # 更新全局变量
-        else:
-            print(f"没有新成绩，当前成绩{score_list}")
+        except IndexError:
+            print("新成绩列表为空，可能被顶下线，十分钟后重新登录。")
+            time.sleep(600)  # 等待十分钟
+            session, cookies = simulate_login(user_account, user_password)
 
         time.sleep(2)
 
