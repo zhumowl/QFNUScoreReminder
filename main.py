@@ -256,7 +256,8 @@ def main():
         if score_list != last_score_list:
             new_scores = get_new_scores(score_list, score_list)
             print(f"发现新成绩！{new_scores}")
-            dingtalk(DD_BOT_TOKEN, DD_BOT_SECRET, "发现新成绩！", f"{new_scores}")
+            message = f"科目: {new_scores[0][0]}\n成绩: {new_scores[0][1]}"
+            dingtalk(DD_BOT_TOKEN, DD_BOT_SECRET, "发现新成绩！", message)
             last_score_list = score_list  # 更新全局变量
         else:
             print(f"没有新成绩，当前成绩{score_list}")
