@@ -2,7 +2,7 @@ name: Auto Commit Changes
 
 on:
   schedule:
-    - cron: '0 * * * *'  # 每小时执行一次
+    - cron: "0 * * * *" # 每小时执行一次
   push:
     branches:
       - main # 你可以根据需要更改分支名称
@@ -26,6 +26,11 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run script
+        env:
+          USER_ACCOUNT: ${{ secrets.USER_ACCOUNT }}
+          USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
+          DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
+          DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
         run: python main.py
 
       - name: Commit changes
