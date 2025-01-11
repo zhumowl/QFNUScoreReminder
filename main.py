@@ -267,7 +267,7 @@ def main():
                 DD_BOT_TOKEN,
                 DD_BOT_SECRET,
                 "成绩监控通知",
-                "无法建立会话，请检查网络连接或教务系统的可用性。",
+                f"学号: {user_account}\n无法建立会话，请检查网络连接或教务系统的可用性。",
             )
         return
 
@@ -293,7 +293,7 @@ def main():
                     DD_BOT_TOKEN,
                     DD_BOT_SECRET,
                     "成绩监控通知",
-                    "初始化保存当前成绩成功",
+                    f"学号: {user_account}\n初始化保存当前成绩成功",
                 )
         elif score_list_converted != last_score_list:
             new_scores = get_new_scores(score_list_converted, last_score_list)
@@ -307,7 +307,7 @@ def main():
                         DD_BOT_TOKEN,
                         DD_BOT_SECRET,
                         "成绩监控通知",
-                        f"发现新成绩！\n{message}",
+                        f"学号: {user_account}\n发现新成绩！\n{message}",
                     )
                 # 更新成绩文件
                 save_scores_to_file(score_list_converted)
@@ -321,7 +321,7 @@ def main():
                 DD_BOT_TOKEN,
                 DD_BOT_SECRET,
                 "成绩监控通知",
-                f"发生错误: {e}",
+                f"学号: {user_account}\n发生错误: {e}",
             )
 
 
