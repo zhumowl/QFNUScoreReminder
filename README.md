@@ -2,6 +2,8 @@
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-blue)
+![GitHub stars](https://img.shields.io/github/stars/W1ndys/QFNUScoreReminder?style=social)
+![GitHub forks](https://img.shields.io/github/forks/W1ndys/QFNUScoreReminder?style=social)
 
 **曲阜师范大学教务系统成绩监控**  
 检测到新有成绩出来之后会上报
@@ -35,8 +37,9 @@
 - 记录配置的 `webhook` 和 `secret`（不要泄露）。
 
 例如，如果你的 webhook 是 `https://oapi.dingtalk.com/robot/send?access_token=xxx` ，那么：
-  - `DD_BOT_TOKEN` 就是 `xxx`
-  - `DD_BOT_SECRET` 就是 `secret`
+
+- `DD_BOT_TOKEN` 就是 `xxx`
+- `DD_BOT_SECRET` 就是 `secret`
 
 ![钉钉机器人](https://pica.zhimg.com/80/v2-99e91c06e71ac28cbed199f9e4321896.png)
 
@@ -47,6 +50,7 @@
 ![配置环境变量](https://pica.zhimg.com/80/v2-e24e61d04f7bfdde25ce104f2a016c5d.png)
 
 分别配置以下环境变量：
+
 - `DD_BOT_SECRET` 和 `DD_BOT_TOKEN`：钉钉机器人配置的 `webhook` 和 `secret`
 - `USER_ACCOUNT` 和 `USER_PASSWORD`：教务系统账号密码
 
