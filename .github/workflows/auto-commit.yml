@@ -47,4 +47,4 @@ jobs:
         if: env.CHANGES == 'true'
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: Automatically update
+          commit_message: 刷新成绩
