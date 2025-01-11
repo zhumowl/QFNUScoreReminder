@@ -10,6 +10,8 @@
 
 ## 使用方法
 
+使用教程：https://blog.w1ndys.top/posts/4fee17c4
+
 ### fork 项目
 
 [W1ndys/QFNUScoreReminder: 曲阜师范大学教务系统成绩监控，检测到新有成绩出来之后会上报](https://github.com/W1ndys/QFNUScoreReminder)
@@ -46,4 +48,4 @@
 
 收到钉钉消息，说明配置成功并且初始化成功
 
-到这里已经可以正常运行了，程序会每5分钟检查一次成绩，有新成绩会发送钉钉消息
+到这里已经可以正常运行了，程序会每 5 分钟检查一次成绩，有新成绩会发送钉钉消息
