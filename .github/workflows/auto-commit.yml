@@ -6,6 +6,7 @@ on:
   push:
     branches:
       - main # 你可以根据需要更改分支名称
+  workflow_dispatch: # 新增手动触发
 
 jobs:
   build:
