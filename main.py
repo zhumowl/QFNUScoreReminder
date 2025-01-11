@@ -262,12 +262,13 @@ def main():
 
     if not session or not cookies:
         logging.error("无法建立会话，请检查网络连接或教务系统的可用性。")
-        dingtalk(
-            DD_BOT_TOKEN,
-            DD_BOT_SECRET,
-            "成绩监控通知",
-            "无法建立会话，请检查网络连接或教务系统的可用性。",
-        )
+        if DD_BOT_TOKEN and DD_BOT_SECRET:
+            dingtalk(
+                DD_BOT_TOKEN,
+                DD_BOT_SECRET,
+                "成绩监控通知",
+                "无法建立会话，请检查网络连接或教务系统的可用性。",
+            )
         return
 
     try:
@@ -287,12 +288,13 @@ def main():
         if not last_score_list:
             logging.info("初始化保存当前成绩")
             save_scores_to_file(score_list_converted)
-            dingtalk(
-                DD_BOT_TOKEN,
-                DD_BOT_SECRET,
-                "成绩监控通知",
-                "初始化保存当前成绩成功",
-            )
+            if DD_BOT_TOKEN and DD_BOT_SECRET:
+                dingtalk(
+                    DD_BOT_TOKEN,
+                    DD_BOT_SECRET,
+                    "成绩监控通知",
+                    "初始化保存当前成绩成功",
+                )
         elif score_list_converted != last_score_list:
             new_scores = get_new_scores(score_list_converted, last_score_list)
             if new_scores:
@@ -300,12 +302,13 @@ def main():
                 message = "\n".join(
                     [f"科目: {score[0]}\n成绩: {score[1]}" for score in new_scores]
                 )
-                dingtalk(
-                    DD_BOT_TOKEN,
-                    DD_BOT_SECRET,
-                    "成绩监控通知",
-                    f"发现新成绩！\n{message}",
-                )
+                if DD_BOT_TOKEN and DD_BOT_SECRET:
+                    dingtalk(
+                        DD_BOT_TOKEN,
+                        DD_BOT_SECRET,
+                        "成绩监控通知",
+                        f"发现新成绩！\n{message}",
+                    )
                 # 更新成绩文件
                 save_scores_to_file(score_list_converted)
         else:
@@ -313,12 +316,13 @@ def main():
 
     except Exception as e:
         logging.error(f"发生错误: {e}")
-        dingtalk(
-            DD_BOT_TOKEN,
-            DD_BOT_SECRET,
-            "成绩监控通知",
-            f"发生错误: {e}",
-        )
+        if DD_BOT_TOKEN and DD_BOT_SECRET:
+            dingtalk(
+                DD_BOT_TOKEN,
+                DD_BOT_SECRET,
+                "成绩监控通知",
+                f"发生错误: {e}",
+            )
 
 
 if __name__ == "__main__":
