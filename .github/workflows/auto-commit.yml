@@ -45,6 +45,4 @@ jobs:
         if: env.CHANGES == 'true'
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: "chore: 自动提交更改"
-          commit_user_name: "github-actions[bot]"
-          commit_user_email: "github-actions[bot]@users.noreply.github.com"
+          commit_message: Automatically update
