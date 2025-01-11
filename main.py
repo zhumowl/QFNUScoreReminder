@@ -217,7 +217,6 @@ def save_scores_to_file(scores, filename="scores.json"):
     """
     with open(filename, "w", encoding="utf-8") as f:
         json.dump(scores, f, ensure_ascii=False, indent=4)
-    logging.info(f"成绩已保存到 {filename}")
 
 
 def load_scores_from_file(filename="scores.json"):
@@ -229,7 +228,12 @@ def load_scores_from_file(filename="scores.json"):
     """
     if os.path.exists(filename):
         with open(filename, "r", encoding="utf-8") as f:
-            return json.load(f)
+            data = f.read()
+            if data.strip():  # 检查文件是否有数据
+                return json.loads(data)
+            else:
+                logging.info(f"文件 {filename} 为空，初始化为空列表")
+                return []
     else:
         logging.error(f"文件 {filename} 不存在，新建空文件")
         with open(filename, "w", encoding="utf-8") as f:
@@ -279,7 +283,17 @@ def main():
         # 将 score_list 转换为与 last_score_list 相同的格式
         score_list_converted = [list(score) for score in score_list]
 
-        if score_list_converted != last_score_list:
+        # 检查是否需要初始化保存成绩
+        if not last_score_list:
+            logging.info("初始化保存当前成绩")
+            save_scores_to_file(score_list_converted)
+            dingtalk(
+                DD_BOT_TOKEN,
+                DD_BOT_SECRET,
+                "成绩监控通知",
+                "初始化保存当前成绩成功",
+            )
+        elif score_list_converted != last_score_list:
             new_scores = get_new_scores(score_list_converted, last_score_list)
             if new_scores:
                 logging.info(f"发现新成绩！{new_scores}")
