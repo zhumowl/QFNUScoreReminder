@@ -292,9 +292,10 @@ def main():
                     "成绩监控通知",
                     f"发现新成绩！\n{message}",
                 )
-            save_scores_to_file(score_list_converted)  # 保存成绩到文件
+                # 更新成绩文件
+                save_scores_to_file(score_list_converted)
         else:
-            logging.info(f"没有新成绩，当前成绩{score_list_converted}")
+            logging.info(f"没有新成绩")
 
     except Exception as e:
         logging.error(f"发生错误: {e}")
