@@ -8,10 +8,6 @@
 **曲阜师范大学教务系统成绩监控**  
 检测到新有成绩出来之后会上报
 
-![项目图片](./assets/image.png)
-
----
-
 ## 效果展示
 
 ![效果](https://pica.zhimg.com/80/v2-ab040cb6e2c97cd56de73d09777c4f07.png)
