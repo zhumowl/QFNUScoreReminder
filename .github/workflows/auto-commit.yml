@@ -2,7 +2,7 @@ name: Auto Commit Changes
 
 on:
   schedule:
-    - cron: "*/5 * * * *" # 每五分钟执行一次
+    - cron: "*/2 * * * *" # 每两分钟执行一次
   push:
     branches:
       - main # 你可以根据需要更改分支名称
