@@ -252,38 +252,38 @@ def main():
     """
     print_welcome()
 
-    # 获取环境变量
-    user_account, user_password = get_user_credentials()
-    if not user_account or not user_password:
-        logging.error(
-            "请在.env文件中设置USER_ACCOUNT、USER_PASSWORD、DD_BOT_TOKEN、DD_BOT_SECRET环境变量"
-        )
-        with open(".env", "w", encoding="utf-8") as f:
-            f.write("USER_ACCOUNT=\nUSER_PASSWORD=\nDD_BOT_TOKEN=\nDD_BOT_SECRET=")
-        return
-
-    # 模拟登录并获取会话
-    session, cookies = simulate_login(user_account, user_password)
-
-    if not session or not cookies:
-        logging.error("无法建立会话，请检查网络连接或教务系统的可用性。")
-        if DD_BOT_TOKEN and DD_BOT_SECRET:
-            dingtalk(
-                DD_BOT_TOKEN,
-                DD_BOT_SECRET,
-                "成绩监控通知",
-                f"学号: {user_account}\n无法建立会话，请检查网络连接或教务系统的可用性。",
-            )
-        if FEISHU_BOT_URL and FEISHU_BOT_SECRET:
-            feishu_notify(
-                FEISHU_BOT_URL,
-                FEISHU_BOT_SECRET,
-                "成绩监控通知",
-                f"学号: {user_account}\n无法建立会话，请检查网络连接或教务系统的可用性。",
-            )
-        return
-
     try:
+        # 获取环境变量
+        user_account, user_password = get_user_credentials()
+        if not user_account or not user_password:
+            logging.error(
+                "请在.env文件中设置USER_ACCOUNT、USER_PASSWORD、DD_BOT_TOKEN、DD_BOT_SECRET环境变量"
+            )
+            with open(".env", "w", encoding="utf-8") as f:
+                f.write("USER_ACCOUNT=\nUSER_PASSWORD=\nDD_BOT_TOKEN=\nDD_BOT_SECRET=")
+            return
+
+        # 模拟登录并获取会话
+        session, cookies = simulate_login(user_account, user_password)
+
+        if not session or not cookies:
+            logging.error("无法建立会话，请检查网络连接或教务系统的可用性。")
+            if DD_BOT_TOKEN and DD_BOT_SECRET:
+                dingtalk(
+                    DD_BOT_TOKEN,
+                    DD_BOT_SECRET,
+                    "成绩监控通知",
+                    f"学号: {user_account}\n无法建立会话，请检查网络连接或教务系统的可用性。",
+                )
+            if FEISHU_BOT_URL and FEISHU_BOT_SECRET:
+                feishu_notify(
+                    FEISHU_BOT_URL,
+                    FEISHU_BOT_SECRET,
+                    "成绩监控通知",
+                    f"学号: {user_account}\n无法建立会话，请检查网络连接或教务系统的可用性。",
+                )
+            return
+
         # 从文件加载上一次的成绩
         last_score_list = load_scores_from_file()
 
