@@ -25,7 +25,9 @@ def feishu_notify(FEISHU_BOT_URL, FEISHU_BOT_SECRET, title, text):
         logging.info("飞书通知发送成功")
         return response.json()
     else:
-        logging.error(f"飞书通知发送失败，状态码: {response.status_code}")
+        logging.error(
+            f"飞书通知发送失败，状态码: {response.status_code}，错误信息: {response.json()}"
+        )
         return response.json()
 
 
