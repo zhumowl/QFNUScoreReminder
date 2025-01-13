@@ -21,7 +21,7 @@ def feishu_notify(FEISHU_BOT_URL, FEISHU_BOT_SECRET, title, text):
         "content": {"text": f"{title}\n{text}\n{FEISHU_BOT_SECRET}"},
     }
     response = requests.post(FEISHU_BOT_URL, headers=headers, json=data)
-    if response.status_code == 200:
+    if response.json()["code"] == 0:
         logging.info("飞书通知发送成功")
         return response.json()
     else:
