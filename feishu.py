@@ -20,6 +20,7 @@ def feishu_notify(FEISHU_BOT_URL, FEISHU_BOT_SECRET, title, text):
         "msg_type": "text",
         "content": {"text": f"{title}\n{text}\n{FEISHU_BOT_SECRET}"},
     }
+
     response = requests.post(FEISHU_BOT_URL, headers=headers, json=data)
     if response.json()["code"] == 0:
         logging.info("飞书通知发送成功")
@@ -33,7 +34,7 @@ def feishu_notify(FEISHU_BOT_URL, FEISHU_BOT_SECRET, title, text):
 
 if __name__ == "__main__":
     FEISHU_BOT_URL = "https://open.feishu.cn/open-apis/bot/v2/hook/f20a7d17-af7c-4b1f-b495-68ebf1ddd714"
-    FEISHU_BOT_SECRET = "W1ndys测试验证关键词"
+    FEISHU_BOT_SECRET = "W1ndys"
     res = feishu_notify(
         FEISHU_BOT_URL,
         FEISHU_BOT_SECRET,

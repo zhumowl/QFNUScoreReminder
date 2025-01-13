@@ -251,16 +251,20 @@ def main():
     主函数，协调整个程序的执行流程
     """
     print_welcome()
-
+    logging.info("开始执行")
     try:
+        logging.info("获取环境变量")
+
         # 获取环境变量
         user_account, user_password = get_user_credentials()
         if not user_account or not user_password:
             logging.error(
-                "请在.env文件中设置USER_ACCOUNT、USER_PASSWORD、DD_BOT_TOKEN、DD_BOT_SECRET环境变量"
+                "请在.env文件中设置USER_ACCOUNT、USER_PASSWORD、DD_BOT_TOKEN、DD_BOT_SECRET、FEISHU_BOT_URL、FEISHU_BOT_SECRET环境变量"
             )
             with open(".env", "w", encoding="utf-8") as f:
-                f.write("USER_ACCOUNT=\nUSER_PASSWORD=\nDD_BOT_TOKEN=\nDD_BOT_SECRET=")
+                f.write(
+                    "USER_ACCOUNT=\nUSER_PASSWORD=\nDD_BOT_TOKEN=\nDD_BOT_SECRET=\nFEISHU_BOT_URL=\nFEISHU_BOT_SECRET="
+                )
             return
 
         # 模拟登录并获取会话
