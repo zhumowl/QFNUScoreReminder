@@ -5,15 +5,20 @@ from bs4 import BeautifulSoup
 from captcha_ocr import get_ocr_res
 import os
 from dotenv import load_dotenv
-import time
 import json
 from dingtalk import dingtalk
+from feishu import feishu_notify
 import logging
 
 load_dotenv()
 
+# 钉钉机器人推送
 DD_BOT_TOKEN = os.getenv("DD_BOT_TOKEN")
 DD_BOT_SECRET = os.getenv("DD_BOT_SECRET")
+
+# 飞书机器人推送
+FEISHU_BOT_URL = os.getenv("FEISHU_BOT_URL")
+FEISHU_BOT_SECRET = os.getenv("FEISHU_BOT_SECRET")
 
 # 设置日志配置
 logging.basicConfig(
@@ -269,6 +274,13 @@ def main():
                 "成绩监控通知",
                 f"学号: {user_account}\n无法建立会话，请检查网络连接或教务系统的可用性。",
             )
+        if FEISHU_BOT_URL and FEISHU_BOT_SECRET:
+            feishu_notify(
+                FEISHU_BOT_URL,
+                FEISHU_BOT_SECRET,
+                "成绩监控通知",
+                f"学号: {user_account}\n无法建立会话，请检查网络连接或教务系统的可用性。",
+            )
         return
 
     try:
@@ -295,6 +307,13 @@ def main():
                     "成绩监控通知",
                     f"学号: {user_account}\n初始化保存当前成绩成功",
                 )
+            if FEISHU_BOT_URL and FEISHU_BOT_SECRET:
+                feishu_notify(
+                    FEISHU_BOT_URL,
+                    FEISHU_BOT_SECRET,
+                    "成绩监控通知",
+                    f"学号: {user_account}\n初始化保存当前成绩成功",
+                )
         elif score_list_converted != last_score_list:
             new_scores = get_new_scores(score_list_converted, last_score_list)
             if new_scores:
@@ -309,6 +328,13 @@ def main():
                         "成绩监控通知",
                         f"学号: {user_account}\n发现新成绩！\n{message}",
                     )
+                if FEISHU_BOT_URL and FEISHU_BOT_SECRET:
+                    feishu_notify(
+                        FEISHU_BOT_URL,
+                        FEISHU_BOT_SECRET,
+                        "成绩监控通知",
+                        f"学号: {user_account}\n发现新成绩！\n{message}",
+                    )
                 # 更新成绩文件
                 save_scores_to_file(score_list_converted)
         else:
@@ -320,6 +346,13 @@ def main():
             dingtalk(
                 DD_BOT_TOKEN,
                 DD_BOT_SECRET,
+                "成绩监控通知",
+                f"学号: {user_account}\n发生错误: {e}",
+            )
+        if FEISHU_BOT_URL and FEISHU_BOT_SECRET:
+            feishu_notify(
+                FEISHU_BOT_URL,
+                FEISHU_BOT_SECRET,
                 "成绩监控通知",
                 f"学号: {user_account}\n发生错误: {e}",
             )

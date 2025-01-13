@@ -39,7 +39,17 @@
 
 ![钉钉机器人](https://pica.zhimg.com/80/v2-99e91c06e71ac28cbed199f9e4321896.png)
 
-### 3. 配置环境变量
+### 3. 新增飞书机器人（可选）
+
+- 访问飞书开放平台，创建一个自定义机器人。
+- 记录配置的 `webhook` 和 `secret`（不要泄露）。
+
+例如，如果你的 webhook 是 `https://open.feishu.cn/open-apis/bot/v2/hook/xxxxxxx` ，那么：
+
+- `FEISHU_BOT_URL` 就是 `https://open.feishu.cn/open-apis/bot/v2/hook/xxxxxxx`
+- `FEISHU_BOT_SECRET` 就是 `ckT9uUYiQ2cofxxxxxxx`
+
+### 4. 配置环境变量
 
 进入设置配置环境变量。
 
@@ -48,14 +58,15 @@
 分别配置以下环境变量：
 
 - `DD_BOT_SECRET` 和 `DD_BOT_TOKEN`：钉钉机器人配置的 `webhook` 和 `secret`
+- `FEISHU_BOT_URL` 和 `FEISHU_BOT_SECRET`：飞书机器人配置的 `webhook` 和 `secret`
 - `USER_ACCOUNT` 和 `USER_PASSWORD`：教务系统账号密码
 
-### 4. 运行
+### 5. 运行
 
-点击 `Run workflow` 按钮，运行项目。如果配置正确，会收到钉钉消息。
+点击 `Run workflow` 按钮，运行项目。如果配置正确，会收到钉钉和飞书消息。
 
 ![运行项目](https://pica.zhimg.com/80/v2-7c49b45057d28dec0b33b9b7b37bc108.png)
 
-收到钉钉消息，说明配置成功并且初始化成功。
+收到消息，说明配置成功并且初始化成功。
 
-程序会每 5 分钟检查一次成绩，有新成绩会发送钉钉消息。
+程序会每 5 分钟检查一次成绩，有新成绩会发送消息。
