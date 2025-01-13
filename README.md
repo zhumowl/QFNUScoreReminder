@@ -44,10 +44,8 @@
 - 访问飞书开放平台，创建一个自定义机器人。
 - 记录配置的 `webhook` 和 `secret`（不要泄露）。
 
-例如，如果你的 webhook 是 `https://open.feishu.cn/open-apis/bot/v2/hook/xxxxxxx` ，那么：
-
 - `FEISHU_BOT_URL` 就是 `https://open.feishu.cn/open-apis/bot/v2/hook/xxxxxxx`
-- `FEISHU_BOT_SECRET` 就是 `ckT9uUYiQ2cofxxxxxxx`
+- `FEISHU_BOT_SECRET` 就是验证关键词，自己自定义的
 
 ### 4. 配置环境变量
 
