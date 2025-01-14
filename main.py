@@ -266,7 +266,12 @@ def main():
                     "USER_ACCOUNT=\nUSER_PASSWORD=\nDD_BOT_TOKEN=\nDD_BOT_SECRET=\nFEISHU_BOT_URL=\nFEISHU_BOT_SECRET="
                 )
             return
-
+        logging.info("获取环境变量成功，分别为：")
+        logging.info(f"DD_BOT_TOKEN: {DD_BOT_TOKEN}")
+        logging.info(f"DD_BOT_SECRET: {DD_BOT_SECRET}")
+        logging.info(f"FEISHU_BOT_URL: {FEISHU_BOT_URL}")
+        logging.info(f"FEISHU_BOT_SECRET: {FEISHU_BOT_SECRET}")
+        logging.info("开始模拟登录")
         # 模拟登录并获取会话
         session, cookies = simulate_login(user_account, user_password)
 

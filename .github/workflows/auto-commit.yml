@@ -33,6 +33,8 @@ jobs:
           USER_PASSWORD: ${{ secrets.USER_PASSWORD }}
           DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
           DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
+          FEISHU_BOT_URL: ${{ secrets.FEISHU_BOT_URL }}
+          FEISHU_BOT_SECRET: ${{ secrets.FEISHU_BOT_SECRET }}
         run: python main.py
 
       - name: Check for changes
